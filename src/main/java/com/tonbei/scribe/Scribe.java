@@ -55,8 +55,9 @@ public class Scribe extends JavaPlugin implements Listener {
                     return;
                 }
 
-                /* コストが0以下だとスロットからアイテムを取り出せない */
-                int cost = 1;
+                /* - コストが0以下だとスロットからアイテムを取り出せない */
+                /* + Paper 1.17.1 #387で修正*/
+                int cost = 0;
                 ItemStack book = new ItemStack(Material.ENCHANTED_BOOK);
                 EnchantmentStorageMeta meta = (EnchantmentStorageMeta) book.getItemMeta();
                 for(Map.Entry<Enchantment, Integer> entry : second.getEnchantments().entrySet()){
