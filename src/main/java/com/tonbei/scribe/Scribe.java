@@ -30,6 +30,7 @@ public class Scribe extends JavaPlugin implements Listener {
 
     private static final int MAX_ENCHANT_LEVEL = 10;
     private static final int MAX_ANVIL_USE_COUNT = 4;
+    private static final int MAX_ANVIL_PENALTY = (int) Math.pow(2, MAX_ANVIL_USE_COUNT) - 1;
 
     private static final Map<Enchantment, Integer> ENCHANTMENT_COST;
 
@@ -164,25 +165,30 @@ public class Scribe extends JavaPlugin implements Listener {
 
                 if (cost <= 0) return;
 
-                if (!isEnchantedBook) {
-                    if (first.getItemMeta() instanceof Repairable) {
-                        repairCost = ((Repairable) first.getItemMeta()).getRepairCost();
-                        cost += repairCost;
-                        repairCost = (int) Math.round(Math.pow(2, Math.min((int) Math.round((Math.log(repairCost + 1) / Math.log(2))) + 1, MAX_ANVIL_USE_COUNT))) - 1;
-                    }
+                if (first.getItemMeta() instanceof Repairable) {
+                    repairCost = ((Repairable) first.getItemMeta()).getRepairCost();
+                    cost += repairCost;
+                    repairCost = Math.min(2 * repairCost + 1, MAX_ANVIL_PENALTY);
+                }
+
+                if (second.getItemMeta() instanceof Repairable) {
+                    int secondRepairCost = ((Repairable) second.getItemMeta()).getRepairCost();
+                    cost += secondRepairCost;
+                    repairCost = Math.min(MAX_ANVIL_PENALTY, Math.max(repairCost, 2 * secondRepairCost + 1));
                 }
 
                 ItemStack resultItem = first.clone();
+                if (resultItem.getItemMeta() instanceof Repairable) {
+                    ItemMeta repairableMeta = resultItem.getItemMeta();
+                    ((Repairable) repairableMeta).setRepairCost(repairCost);
+                    resultItem.setItemMeta(repairableMeta);
+                }
+
                 if (isEnchantedBook) {
                     EnchantmentStorageMeta bookMeta = (EnchantmentStorageMeta) resultItem.getItemMeta();
                     enchantments.forEach((enchantment, level) -> bookMeta.addStoredEnchant(enchantment, level, true));
                     resultItem.setItemMeta(bookMeta);
                 } else {
-                    if (resultItem.getItemMeta() instanceof Repairable) {
-                        ItemMeta repairableMeta = resultItem.getItemMeta();
-                        ((Repairable) repairableMeta).setRepairCost(repairCost);
-                        resultItem.setItemMeta(repairableMeta);
-                    }
                     resultItem.addUnsafeEnchantments(enchantments);
                 }
 
