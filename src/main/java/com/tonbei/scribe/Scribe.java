@@ -43,7 +43,7 @@ public class Scribe extends JavaPlugin implements Listener {
         temp.put(Enchantment.PROTECTION_PROJECTILE, 1);
         temp.put(Enchantment.OXYGEN, 2);
         temp.put(Enchantment.WATER_WORKER, 2);
-        temp.put(Enchantment.THORNS, 1);
+        temp.put(Enchantment.THORNS, 4);
         temp.put(Enchantment.DEPTH_STRIDER, 2);
         temp.put(Enchantment.FROST_WALKER, 2);
         temp.put(Enchantment.BINDING_CURSE, 4);
