@@ -1,6 +1,6 @@
 name: Scribe
 version: '${project.version}'
-main: com.tonbei.scribe.Scribe
+main: com.github.tonbei.scribe.Scribe
 api-version: 1.17
 authors: [ tonbei10 ]
 description: Remove enchantments

@@ -1,4 +1,4 @@
-package com.tonbei.scribe;
+package com.github.tonbei.scribe;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
